@@ -14,20 +14,32 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private cartService: CartService
-  ) { }
+  ) {  }
 
 
   ngOnInit() {
     // First get the product id from the current route
     const productIdFromRoute = this.route.snapshot.paramMap.get('productId');
     // Find the product that corresponds with the id provided in route
-    this.product = productList.find(product => {
+    const pDetails = productList.find((product: Product) => {
       return product.id === Number(productIdFromRoute);
     })
+    if (pDetails !== undefined) {
+      this.product = new Product(
+        pDetails.name,
+        pDetails.price,
+        pDetails.description,
+        pDetails.id
+      );
+    }
   }
 
   addToCart() {
     this.cartService.addToCart(this.product);
-    window.alert('Your product has been added to the cart');
+    console.log(this.product instanceof Product);
+
+    if (this.product instanceof Product) {
+      console.log('yes');
+    }
   }
 }
