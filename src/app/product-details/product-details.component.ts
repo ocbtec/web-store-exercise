@@ -23,7 +23,7 @@ export class ProductDetailsComponent implements OnInit {
     // Find the product that corresponds with the id provided in route
     const pDetails = productList.find((product: Product) => {
       return product.id === Number(productIdFromRoute);
-    })
+    });
     if (pDetails !== undefined) {
       this.product = new Product(
         pDetails.name,
@@ -36,10 +36,6 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart() {
     this.cartService.addToCart(this.product);
-    console.log(this.product instanceof Product);
-
-    if (this.product instanceof Product) {
-      console.log('yes');
-    }
+    this.cartService.getTotalItemsCount();
   }
 }

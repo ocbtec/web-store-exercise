@@ -1,34 +1,29 @@
 import { Injectable } from '@angular/core';
-
-export class Product {
-  name: string;
-  price: number;
-  description: string;
-  id: number;
-
-  constructor(name: string = '', price: number = 0, description: string = '', id:number = -1) {
-    this.name = name;
-    this.price = price;
-    this.description = description;
-    this.id = id;
-  }
-}
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  items: Array<Product> = [];
+  items: Array<ShoppingItem> = [];
+  itemsCount: number = 0;
 
   constructor() { }
 
   addToCart(product: Product | undefined) {
-    // if (product !== undefined) {
+    let itemIndex: number = -1;
     if (product instanceof Product) {
-      this.items.push(product);
+      const sItem = this.items.find((shoppingItem, index) => {
+        itemIndex = index;
+        return shoppingItem.product.id === product.id;
+      });
+      if (sItem){
+        this.items[itemIndex].count++;
+        this.items[itemIndex].price = product.price * this.items[itemIndex].count;
+      } else {
+        this.items.push(new ShoppingItem(product));
+      }
     }
-    console.log(this.items);
-
   }
   getItems() {
     return this.items;
@@ -36,5 +31,46 @@ export class CartService {
   clearCart() {
     this.items = [];
     return this.items;
+  }
+  getTotalPrice(): number {
+    let totalPrice: number = 0;
+    this.items.forEach(element => {
+      totalPrice += element.price;
+    });
+    return totalPrice;
+  }
+
+  getTotalItemsCount() {
+    this.itemsCount = 0;
+    this.items.forEach(element => {
+      this.itemsCount += element.count;
+    });
+  }
+
+}
+
+export class Product {
+  name: string;
+  price: number;
+  description: string;
+  id: number;
+
+  constructor(name: string = '', price: number = 0, description: string = '', id: number = -1) {
+    this.name = name;
+    this.price = price;
+    this.description = description;
+    this.id = id;
+  }
+}
+
+export class ShoppingItem {
+  product: Product;
+  count: number;
+  price: number;
+
+  constructor(product: Product) {
+    this.product = product;
+    this.count = 1;
+    this.price = product.price;
   }
 }
