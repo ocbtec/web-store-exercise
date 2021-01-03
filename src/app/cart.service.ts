@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class CartService {
   items: Array<ShoppingItem> = [];
   itemsCount: number = 0;
+  totalPrice: number = 0;
 
   constructor(private http: HttpClient) { }
 
@@ -37,11 +38,11 @@ export class CartService {
   }
 
   getTotalPrice(): number {
-    let totalPrice: number = 0;
+    this.totalPrice = 0;
     this.items.forEach(element => {
-      totalPrice += element.price;
+      this.totalPrice += element.price;
     });
-    return totalPrice;
+    return this.totalPrice;
   }
 
   getTotalItemsCount() {
@@ -49,6 +50,35 @@ export class CartService {
     this.items.forEach(element => {
       this.itemsCount += element.count;
     });
+  }
+
+  addItem(itemId: number) {
+    const sItem = this.items.find((item: ShoppingItem) => {
+      return Number(itemId) === item.product.id;
+    });
+    if (sItem !== undefined) {
+      this.addToCart(sItem.product);
+      this.getTotalItemsCount();
+      this.getTotalPrice();
+    }
+  }
+
+  removeItem(itemId: number) {
+    let productToRemove = -1;
+    const shoppingItem = this.items.find((item: ShoppingItem, index) => {
+      productToRemove = index;
+      return Number(itemId) === item.product.id;
+    });
+    if (shoppingItem !== undefined && shoppingItem.count === 1) {
+      this.items.splice(productToRemove, 1);
+      this.getTotalItemsCount();
+      this.getTotalPrice();
+    } else if (shoppingItem !== undefined && shoppingItem.count > 0) {
+      shoppingItem.count--;
+      this.getTotalItemsCount();
+      this.items[productToRemove].price = this.items[productToRemove].product.price * shoppingItem.count;
+      this.getTotalPrice();
+    }
   }
 
   getShippingPrices() {
