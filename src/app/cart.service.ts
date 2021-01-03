@@ -32,6 +32,7 @@ export class CartService {
 
   clearCart() {
     this.items = [];
+    this.getTotalItemsCount();
     return this.items;
   }
 

@@ -11,9 +11,22 @@
   <div>Total Price: {{ item.price | currency }}</div>
 </div>
 
-<div *ngIf="totalPrice > 0" class="cart-total">
+<div *ngIf="cart.itemsCount > 0" class="cart-total">
   <div>
     <div class="cart-total-item">Total Items count: <span class="card-total-bold">{{ cart.itemsCount }}</span></div>
-    <div class="cart-total-item">Total price: <span class="card-total-bold">{{ totalPrice | currency:'EUR' }}</span></div>
+    <div class="cart-total-item">Total price: <span class="card-total-bold">{{ totalPrice | currency }}</span></div>
   </div>
 </div>
+
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+  <div>
+    <label for="name">Name</label>
+    <input id="name" type="text" formControlName="name">
+  </div>
+  <div>
+    <label for="address">Address</label>
+    <input id="address" type="text" formControlName="address">
+  </div>
+
+  <button class="button" type="submit">Purchase</button>
+</form>
