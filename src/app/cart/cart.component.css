@@ -1,0 +1,12 @@
+.cart-total {
+  display: flex;
+  justify-content: flex-end;
+}
+.cart-total-item {
+  background-color: #eeeeee;
+  height: 30px;
+  padding: 0.5rem;
+}
+.card-total-bold {
+  font-weight: 600;
+}

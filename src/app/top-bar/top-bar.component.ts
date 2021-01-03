@@ -7,15 +7,13 @@ import { CartService } from '../cart.service';
   styleUrls: ['./top-bar.component.css']
 })
 export class TopBarComponent implements OnInit {
-  itemCount: number = 0;
+  cart: CartService;
 
-  constructor(private cartService: CartService) { }
-
-  ngOnInit(): void {
-    // this.cartService.getItems().forEach(el => {
-    //   this.itemCount += el.count;
-    // });
+  constructor(private cartService: CartService) {
+    this.cart = cartService;
   }
+
+  ngOnInit(): void { }
 
 
 

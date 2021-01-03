@@ -9,8 +9,11 @@ import { CartService, ShoppingItem } from '../cart.service';
 export class CartComponent implements OnInit {
   items: Array<ShoppingItem> = [];
   totalPrice: number = 0;
+  cart: CartService;
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService) {
+    this.cart = cartService;
+  }
 
   ngOnInit(): void {
     this.items = this.cartService.getItems();
