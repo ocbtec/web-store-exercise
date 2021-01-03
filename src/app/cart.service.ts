@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ export class CartService {
   items: Array<ShoppingItem> = [];
   itemsCount: number = 0;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   addToCart(product: Product | undefined) {
     let itemIndex: number = -1;
@@ -24,13 +25,16 @@ export class CartService {
       }
     }
   }
+
   getItems() {
     return this.items;
   }
+
   clearCart() {
     this.items = [];
     return this.items;
   }
+
   getTotalPrice(): number {
     let totalPrice: number = 0;
     this.items.forEach(element => {
@@ -46,6 +50,9 @@ export class CartService {
     });
   }
 
+  getShippingPrices() {
+    return this.http.get('./assets/shipping.json')
+  }
 }
 
 export class Product {
